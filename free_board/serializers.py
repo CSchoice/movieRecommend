@@ -1,29 +1,26 @@
 from rest_framework import serializers
-from .models import Article, Comment
+from .models import MovieBoardArticle, MovieBoardComment
 
-
-class ArticleListSerializer(serializers.ModelSerializer):
+class MovieBoardArticleListSerializer(serializers.ModelSerializer):
     like_user = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
-        model = Article
-        # fields = ('id', 'title', 'content', 'userId')
+        model = MovieBoardArticle
         fields = '__all__'
 
-class ArticleSerializer(serializers.ModelSerializer):
+class MovieBoardArticleSerializer(serializers.ModelSerializer):
     like_user = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
-        model = Article
+        model = MovieBoardArticle
         fields = '__all__'
         read_only_fields = ('userId',)
 
-class CommentListSerializer(serializers.ModelSerializer):
+class MovieBoardCommentListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
-        # fields = ('id', 'content', 'userId')
+        model = MovieBoardComment
         fields = '__all__'
         
-class CommentSerializer(serializers.ModelSerializer):
+class MovieBoardCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
+        model = MovieBoardComment
         fields = '__all__'
         read_only_fields = ('userId',)

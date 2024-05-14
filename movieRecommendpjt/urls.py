@@ -21,10 +21,10 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.url')),
-    path('free_board/', include('free_board.url')),
-    path('movie_board/', include('movie_board.url')),
-    path('movies/', include('movies.url')),
+    path('accounts/', include('accounts.urls')),
+    path('free_board/', include('free_board.urls')),
+    path('movie_board/', include('movie_board.urls')),
+    path('movies/', include('movies.urls')),
     path('api-token-auth/', obtain_auth_token),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
