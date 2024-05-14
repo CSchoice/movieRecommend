@@ -50,7 +50,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 페이스북 등 추가하고싶은 것이 있다면 여기에 추가(소셜로그인용)
+    # 'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.kakao',
 ]
+
+# 소셜로그인용
+# from django.urls import reverse_lazy
+# LOGIN_REDIRECT_URL = '/admin/'  # 로그인 후 리다이렉트 될 경로
+# ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('accountapp:login')
+# ACCOUNT_LOGOUT_ON_GET = True
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
@@ -154,7 +167,14 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
 }
+
+# 소셜로그인용
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# )
