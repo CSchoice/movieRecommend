@@ -35,8 +35,15 @@ INSTALLED_APPS = [
     'free_board',
     'movie_board',
     'movies',
-    "corsheaders",
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'corsheaders',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,3 +140,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:5173',
+#     'http://localhost:5173',
+# ]
+
+
+
+REST_FRAMEWORK = {
+    # Authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # permission
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.AllowAny',
+    # ],
+}
