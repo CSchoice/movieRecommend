@@ -23,8 +23,8 @@ urlpatterns = [
     path('free_board/<int:article_pk>/', views.free_board_article_detail, name='free_board_article_detail'),
     path('free_board/<int:article_pk>/edit/', views.edit_free_board_article, name='edit_free_board_article'),
     path('free_board/<int:article_pk>/delete/', views.delete_free_board_article, name='delete_free_board_article'),
-    path('free_board/<int:article_pk>/comment/', views.create_free_comment, name='create_free_comment'),
-    path('free_board/<int:article_pk>/comment/<int:comment_pk>/', views.edit_free_comment, name='edit_free_comment'),
-    path('free_board/<int:article_pk>/comment/<int:comment_pk>/delete/', views.delete_free_comment, name='delete_free_comment'),
+    path('free_board/<int:article_pk>/comment/', views.create_free_board_comment, name='create_free_board_comment'),
+    path('free_board/<int:article_pk>/comment/<int:comment_pk>/', views.edit_free_board_comment, name='edit_free_board_comment'),
+    path('free_board/<int:article_pk>/comment/<int:comment_pk>/delete/', views.delete_free_board_comment, name='delete_free_board_comment'),
     path('free_board/<int:article_pk>/like/', views.like_free_board_article, name='like_free_board_article'),
 ]

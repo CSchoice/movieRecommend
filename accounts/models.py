@@ -9,3 +9,4 @@ class User(AbstractUser):
         ('viewer', 'Viewer'),
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)

@@ -40,7 +40,7 @@
 |         URL       |Method  |            설명         |
 | ----------------- | ------ | ---------------------- |
 | /movie_board/   |GET| 전체 게시물 조회  |
-| /movie_board/create/   |POST| 영화 게시판 게시글 작성  |
+| /movie_board/create/{movie_pk}/   |POST| 영화 게시판 게시글 작성  |
 | /movie_board/{article_pk}/   |GET| 영화 게시판 게시글 상세 정보  |
 | /movie_board/{article_pk}/edit/   |PUT| 영화 게시판 게시글 수정  |
 | /movie_board/{article_pk}/edit/   |delete| 영화 게시판 게시글 삭제  |

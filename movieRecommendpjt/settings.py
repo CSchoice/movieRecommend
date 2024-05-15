@@ -64,6 +64,8 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = False
 
 MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",

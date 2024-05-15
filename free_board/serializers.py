@@ -1,26 +1,26 @@
 from rest_framework import serializers
-from .models import MovieBoardArticle, MovieBoardComment
+from .models import FreeBoardArticle, FreeBoardComment
 
-class MovieBoardArticleListSerializer(serializers.ModelSerializer):
+class FreeBoardArticleListSerializer(serializers.ModelSerializer):
     like_user = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
-        model = MovieBoardArticle
+        model = FreeBoardArticle
         fields = '__all__'
 
-class MovieBoardArticleSerializer(serializers.ModelSerializer):
+class FreeBoardArticleSerializer(serializers.ModelSerializer):
     like_user = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
-        model = MovieBoardArticle
+        model = FreeBoardArticle
         fields = '__all__'
         read_only_fields = ('userId',)
 
-class MovieBoardCommentListSerializer(serializers.ModelSerializer):
+class FreeBoardCommentListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MovieBoardComment
+        model = FreeBoardComment
         fields = '__all__'
         
-class MovieBoardCommentSerializer(serializers.ModelSerializer):
+class FreeBoardCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MovieBoardComment
+        model = FreeBoardComment
         fields = '__all__'
         read_only_fields = ('userId',)

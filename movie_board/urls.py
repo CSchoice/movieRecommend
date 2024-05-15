@@ -23,8 +23,8 @@ urlpatterns = [
     path('movie_board/<int:article_pk>/', views.movie_board_article_detail, name='movie_board_article_detail'),
     path('movie_board/<int:article_pk>/edit/', views.edit_movie_board_article, name='edit_movie_board_article'),
     path('movie_board/<int:article_pk>/delete/', views.delete_movie_board_article, name='delete_movie_board_article'),
-    path('movie_board/<int:article_pk>/comment/', views.create_comment, name='create_comment'),
-    path('movie_board/<int:article_pk>/comment/<int:comment_pk>/', views.edit_comment, name='edit_comment'),
-    path('movie_board/<int:article_pk>/comment/<int:comment_pk>/delete/', views.delete_comment, name='delete_comment'),
+    path('movie_board/<int:article_pk>/comment/', views.create_movie_board_comment, name='create_movie_board_comment'),
+    path('movie_board/<int:article_pk>/comment/<int:comment_pk>/', views.edit_movie_board_comment, name='edit_movie_board_comment'),
+    path('movie_board/<int:article_pk>/comment/<int:comment_pk>/delete/', views.delete_movie_board_comment, name='delete_movie_board_comment'),
     path('movie_board/<int:article_pk>/like/', views.like_movie_board_article, name='like_movie_board_article'),
 ]
