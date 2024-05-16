@@ -9,8 +9,10 @@ from .serializers import (
 from movies.models import Movie
 
 @api_view(['GET'])
-def movie_board_comment_list(request):
-    pass
+def movie_board_comment_list(request, movie_pk):
+    comments = MovieBoardComment.objects.filter(movie_id=movie_pk)
+    serializer = MovieBoardCommentListSerializer(comments, many=True)
+    return Response(serializer.data)
 
 # @api_view(['GET'])
 # def movie_board_list(request):
