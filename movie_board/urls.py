@@ -19,10 +19,10 @@ from . import views
 
 urlpatterns = [
     path('', views.movie_board_list, name='movie_board_list'),
-    path('create/<int:movie_id>/', views.create_movie_board_article, name='create_movie_board_article'),
-    path('<int:article_pk>/', views.movie_board_article_detail, name='movie_board_article_detail'),
-    path('<int:article_pk>/edit/', views.edit_movie_board_article, name='edit_movie_board_article'),
-    path('<int:article_pk>/comment/', views.create_movie_board_comment, name='create_movie_board_comment'),
-    path('<int:article_pk>/comment/<int:comment_pk>/', views.edit_movie_board_comment, name='edit_movie_board_comment'),
-    path('<int:article_pk>/like/', views.like_movie_board_article, name='like_movie_board_article'),
+    # path('create/<int:movie_id>/', views.create_movie_board_article, name='create_movie_board_article'),
+    # path('<int:article_pk>/', views.movie_board_article_detail, name='movie_board_article_detail'),
+    # path('<int:article_pk>/edit/', views.edit_movie_board_article, name='edit_movie_board_article'),
+    path('<int:movie_id>/comment/', views.create_movie_board_comment, name='create_movie_board_comment'),
+    path('<int:movie_id>/comment/<int:comment_pk>/', views.edit_movie_board_comment, name='edit_movie_board_comment'),
+    # path('<int:movie_id>/like/', views.like_movie_board_article, name='like_movie_board_article'),
 ]
