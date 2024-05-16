@@ -6,27 +6,27 @@ from .models import User
 from .serializers import UserSerializer
 from django.shortcuts import get_object_or_404
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def user_control(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
+# @api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+# def user_control(request, user_pk):
+#     user = get_object_or_404(User, pk=user_pk)
     
-    if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         serializer = UserSerializer(user)
+#         return Response(serializer.data)
     
-    elif request.method == 'POST':
-        serializer = UserSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'POST':
+#         serializer = UserSerializer(user, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def follow_user(request, tar_user_pk):
+def follow_user(request, tar_username):
     follower = request.user
-    following = get_object_or_404(User, pk=tar_user_pk)
+    following = get_object_or_404(User, pk=tar_username)
     
     if following in follower.followings.all():
         follower.followings.remove(following)
