@@ -52,11 +52,11 @@
 ### 영화 API
 |         URL       |Method  |            설명         |
 | /movies/   |GET| 영화 리스트 조회  |
-| /movies/filter-genre/   |GET| 장르별 영화 조회  |
-| /movies/filter-actor/   |GET| 배우별 영화 조회  |
-| /movies/emotion_recommend   |GET| 기분 바탕 영화 리스트 조회 |
-| /movies/personal_recommend   |GET| emotion_recommend 선택 영화 바탕으로 영화 리스트 조회(tmdb_smillar 사용) |
-| /movies/personal_recommend   |POST| GET 요청에서 선택한 영화 저장 |
+| /movies/filter-genre/{genre}/   |GET| 장르별 영화 조회  |
+| /movies/filter-actor/{actor}/   |GET| 배우별 영화 조회  |
+| /movies/emotion_recommend/{emotion}/   |GET| 기분 바탕 영화 리스트 조회 |
+| /movies/personal_recommend/{movie_lst}   |GET| emotion_recommend 선택 영화 바탕으로 영화 리스트 조회(tmdb_smillar 사용) |
+| /movies/personal_recommend/{movie_title}   |POST| GET 요청에서 선택한 영화 저장 |
 
 ## DB_모델
 
