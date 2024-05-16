@@ -60,54 +60,65 @@
 
 ## DB_모델
 
-### 사용자(User) 모델
+## MovieBoardArticle 모델
 
-| Name          | Type           | Description             | DB Relationship       |
-|---------------|----------------|-------------------------|-----------------------|
-| username      | Text           | 사용자의 로그인 이름    |                       |
-| password      | Text           | 사용자의 비밀번호       |                       |
-| email         | Text           | 사용자의 이메일 주소    |                       |
-| name          | Text(20)       | 사용자의 이름           |                       |
-| nickname      | Text(20)       | 사용자의 닉네임         |                       |
-| introduce     | Text           | 사용자 소개             |                       |
-| profile_img   | Image          | 사용자 프로필 이미지    |                       |
-| created_at    | Date           | 사용자 가입 날짜        |                       |
-| updated_at    | Date           | 사용자 정보 수정 날짜   |                       |
-| followings    | Foreign Key    | 사용자가 팔로우하는 유저 | 유저:유저 = N:M      |
+| Name       | Type           | Description             | DB Relationship       |
+|------------|----------------|-------------------------|-----------------------|
+| title      | CharField(50)  | 기사 제목               |                       |
+| content    | CharField(500) | 기사 내용               |                       |
+| created_at | DateTime       | 기사 생성 날짜          |                       |
+| updated_at | DateTime       | 기사 수정 날짜          |                       |
+| user       | Foreign Key    | 작성자                  | 사용자:기사 = 1:N     |
+| like_user  | ManyToMany     | 좋아요 표시한 사용자    | 사용자:기사 = M:N     |
+| movie      | Foreign Key    | 관련 영화               | 영화:기사 = 1:N       |
 
+## MovieBoardComment 모델
 
-### 기사(Article) 모델
+| Name       | Type           | Description             | DB Relationship       |
+|------------|----------------|-------------------------|-----------------------|
+| article    | Foreign Key    | 관련 기사               | 기사:댓글 = 1:N       |
+| userId     | Foreign Key    | 작성자                  | 사용자:댓글 = 1:N     |
+| content    | TextField      | 댓글 내용               |                       |
+| created_at | DateTime       | 댓글 생성 날짜          |                       |
+| updated_at | DateTime       | 댓글 수정 날짜          |                       |
 
-| Name          | Type           | Description             | DB Relationship       |
-|---------------|----------------|-------------------------|-----------------------|
-| title         | CharField(50)  | 기사 제목               |                       |
-| content       | CharField(500) | 기사 내용               |                       |
-| created_at    | DateTime       | 기사 생성 날짜          |                       |
-| updated_at    | DateTime       | 기사 수정 날짜          |                       |
-| userId        | Foreign Key    | 작성자                  | 사용자:기사 = 1:N     |
-| like_user     | ManyToMany     | 좋아요 표시한 사용자    | 사용자:기사 = M:N     |
+## FreeBoardArticle 모델
 
+| Name       | Type           | Description             | DB Relationship       |
+|------------|----------------|-------------------------|-----------------------|
+| title      | CharField(50)  | 게시물 제목             |                       |
+| content    | CharField(500) | 게시물 내용             |                       |
+| created_at | DateTime       | 게시물 생성 날짜        |                       |
+| updated_at | DateTime       | 게시물 수정 날짜        |                       |
+| userId     | Foreign Key    | 작성자                  | 사용자:게시물 = 1:N   |
+| like_user  | ManyToMany     | 좋아요 표시한 사용자    | 사용자:게시물 = M:N   |
 
-### 댓글(Comment) 모델
+## FreeBoardComment 모델
 
-| Name          | Type           | Description             | DB Relationship       |
-|---------------|----------------|-------------------------|-----------------------|
-| article       | Foreign Key    | 댓글이 달린 기사        | 기사:댓글 = 1:N      |
-| userId        | Foreign Key    | 댓글 작성자             | 사용자:댓글 = 1:N     |
-| content       | TextField      | 댓글 내용               |                       |
-| created_at    | DateTime       | 댓글 작성 날짜          |                       |
-| updated_at    | DateTime       | 댓글 수정 날짜          |                       |
+| Name       | Type           | Description             | DB Relationship       |
+|------------|----------------|-------------------------|-----------------------|
+| article    | Foreign Key    | 관련 게시물             | 게시물:댓글 = 1:N     |
+| userId     | Foreign Key    | 작성자                  | 사용자:댓글 = 1:N     |
+| content    | TextField      | 댓글 내용               |                       |
+| created_at | DateTime       | 댓글 생성 날짜          |                       |
+| updated_at | DateTime       | 댓글 수정 날짜          |                       |
 
+## Genre 모델
 
-### 영화(Movie) 모델
+| Name | Type          | Description | DB Relationship |
+|------|---------------|--------------|-----------------|
+| name | CharField(20) | 장르 이름    |                 |
 
-| Name          | Type           | Description             | DB Relationship       |
-|---------------|----------------|-------------------------|-----------------------|
-| title         | CharField(50)  | 영화 제목               |                       |
-| overview      | CharField(400) | 영화 개요               |                       |
-| release_date  | Date           | 영화 개봉일             |                       |
-| popularity    | FloatField     | 인기도                  |                       |
-| vote_average  | FloatField     | 평균 투표 점수          |                       |
-| poster_path   | CharField(200) | 포스터 이미지 경로      |                       |
-| runtime       | IntegerField   | 상영 시간               |                       |
-| genres        | ManyToMany     | 장르                    | 영화:장르 = M:N       |
+## Movie 모델
+
+| Name         | Type           | Description             | DB Relationship       |
+|--------------|----------------|-------------------------|-----------------------|
+| title        | CharField(50)  | 영화 제목               |                       |
+| overview     | CharField(400) | 영화 개요               |                       |
+| release_date | DateField      | 개봉일                  |                       |
+| popularity   | FloatField     | 인기도                  |                       |
+| vote_average | FloatField     | 평균 평점               |                       |
+| poster_path  | CharField(200) | 포스터 경로             |                       |
+| runtime      | IntegerField   | 상영 시간               |                       |
+| genres       | ManyToMany     | 장르                    | 영화:장르 = M:N       |
+| liked_user   | Foreign Key    | 좋아요 표시한 사용자    | 사용자:영화 = 1:N     |
