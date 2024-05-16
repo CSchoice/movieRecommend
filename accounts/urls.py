@@ -29,6 +29,6 @@ urlpatterns = [
     path('<str:tar_username}/followings/', views.user_followings, name='user_followings'),
     path('<str:tar_username}/followers/', views.user_followers, name='user_followers'),
     path('api-token-auth/', obtain_auth_token),
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('', include('dj_rest_auth.urls')),
+    path('registration/', include('dj_rest_auth.registration.urls')),
 ]

@@ -180,3 +180,14 @@ REST_FRAMEWORK = {
 
 #     'allauth.account.auth_backends.AuthenticationBackend',
 # )
+
+#세션 로그인 사용하지 않고 토큰방식 사용
+REST_AUTH = {
+    'SESSION_LOGIN': False,
+    "REGISTER_SERIALIZER": "accounts.serializers.CustomRegisterSerializer",
+}
+
+# 커스텀 시리얼라이저 사용
+# REST_AUTH_REGISTER_SERIALIZERS = {
+#     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+# }
