@@ -14,7 +14,7 @@ class MovieBoardArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieBoardArticle
         fields = '__all__'
-        read_only_fields = ('userId',)
+        read_only_fields = ('user', 'movie')
 
 class MovieBoardCommentListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,4 +26,4 @@ class MovieBoardCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieBoardComment
         fields = '__all__'
-        read_only_fields = ('userId',)
+        read_only_fields = ('user',)
