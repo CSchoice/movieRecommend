@@ -1,0 +1,21 @@
+[
+{
+  "model": "movies.movie",
+  "pk": 1,
+  "fields": {
+    "movie_id": 1,
+    "title": "test_title",
+    "overview": "test_overview",
+    "release_date": "2024-05-16",
+    "popularity": 10.0,
+    "vote_average": 10.0,
+    "poster_path": "good.good.good",
+    "liked_user": 1,
+    "genres": [
+      12,
+      16,
+      18
+    ]
+  }
+}
+]
