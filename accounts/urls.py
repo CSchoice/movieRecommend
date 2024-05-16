@@ -14,17 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
     # path('accounts/signup/', views.user_signup, name='user_signup'),
     # path('accounts/login/', views.user_login, name='user_login'),
     # path('accounts/logout/', views.user_logout, name='user_logout'),
-    path('accounts/<int:user_pk>/control/', views.user_control, name='user_control'),
-    path('accounts/<int:tar_user_pk>/follow/', views.follow_user, name='user_follow'),
-    path('accounts/check_login/', views.check_login, name='check_login'),
-    path('accounts/<str:tar_username}/profile/', views.user_profile, name='user_profile'),
-    path('accounts/<str:tar_username}/followings/', views.user_followings, name='user_followings'),
-    path('accounts/<str:tar_username}/followers/', views.user_followers, name='user_followers'),
+    path('<int:user_pk>/control/', views.user_control, name='user_control'),
+    path('<int:tar_user_pk>/follow/', views.follow_user, name='user_follow'),
+    path('check_login/', views.check_login, name='check_login'),
+    path('<str:tar_username}/profile/', views.user_profile, name='user_profile'),
+    path('<str:tar_username}/followings/', views.user_followings, name='user_followings'),
+    path('<str:tar_username}/followers/', views.user_followers, name='user_followers'),
+    path('api-token-auth/', obtain_auth_token),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
 ]

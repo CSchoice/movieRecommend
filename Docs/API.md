@@ -122,3 +122,15 @@
 | runtime      | IntegerField   | 상영 시간               |                       |
 | genres       | ManyToMany     | 장르                    | 영화:장르 = M:N       |
 | liked_user   | Foreign Key    | 좋아요 표시한 사용자    | 사용자:영화 = 1:N     |
+
+
+	
+오전 9:23
+
+
+
+
+
+
+
+{"awayIndicator":"#e0b333","buttonBg":"#0079d3","buttonColor":"#ffffff","centerChannelBg":"#ffffff","centerChannelColor":"#333333","codeTheme":"github","dndIndicator":"#f74343","errorTextColor":"#fd5960","linkColor":"#ff4500","mentionBg":"#ff7500","mentionBj":"#ffffff","mentionColor":"#ffffff","mentionHighlightBg":"#ff7500","mentionHighlightLink":"#336699","newMessageSeparator":"#ff7500","onlineIndicator":"#38978d","sidebarBg":"#f7f7f7","sidebarHeaderBg":"#cee3f8","sidebarHeaderTextColor":"#336699","sidebarTeamBarBg":"#a4b5c6","sidebarText":"#336699","sidebarTextActiveBorder":"#b3cce6","sidebarTextActiveColor":"#ff3000","sidebarTextHoverBg":"#b3cce6","sidebarUnreadText":"#336699"}
