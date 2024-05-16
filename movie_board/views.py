@@ -17,8 +17,8 @@ def movie_board_list(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
-def create_movie_board_article(request, movie_pk):
-    movie = get_object_or_404(Movie, pk=movie_pk)
+def create_movie_board_article(request, movie_id):
+    movie = get_object_or_404(Movie, pk=movie_id)
     serializer = MovieBoardArticleSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user, movie=movie)
