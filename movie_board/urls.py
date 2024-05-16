@@ -18,11 +18,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('movie_board/', views.movie_board_list, name='movie_board_list'),
-    path('movie_board/create/', views.create_movie_board_article, name='create_movie_board_article'),
-    path('movie_board/<int:article_pk>/', views.movie_board_article_detail, name='movie_board_article_detail'),
-    path('movie_board/<int:article_pk>/edit/', views.edit_movie_board_article, name='edit_movie_board_article'),
-    path('movie_board/<int:article_pk>/comment/', views.create_movie_board_comment, name='create_movie_board_comment'),
-    path('movie_board/<int:article_pk>/comment/<int:comment_pk>/', views.edit_movie_board_comment, name='edit_movie_board_comment'),
-    path('movie_board/<int:article_pk>/like/', views.like_movie_board_article, name='like_movie_board_article'),
+    path('', views.movie_board_list, name='movie_board_list'),
+    path('create/', views.create_movie_board_article, name='create_movie_board_article'),
+    path('<int:article_pk>/', views.movie_board_article_detail, name='movie_board_article_detail'),
+    path('<int:article_pk>/edit/', views.edit_movie_board_article, name='edit_movie_board_article'),
+    path('<int:article_pk>/comment/', views.create_movie_board_comment, name='create_movie_board_comment'),
+    path('<int:article_pk>/comment/<int:comment_pk>/', views.edit_movie_board_comment, name='edit_movie_board_comment'),
+    path('<int:article_pk>/like/', views.like_movie_board_article, name='like_movie_board_article'),
 ]

@@ -26,7 +26,7 @@ from django.shortcuts import get_object_or_404
 @permission_classes([IsAuthenticated])
 def follow_user(request, tar_username):
     follower = request.user
-    following = get_object_or_404(User, pk=tar_username)
+    following = get_object_or_404(User, username=tar_username)
     
     if following in follower.followings.all():
         follower.followings.remove(following)

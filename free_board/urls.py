@@ -18,11 +18,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('free_board/', views.free_board_list, name='free_board_list'),
-    path('free_board/create/', views.create_free_board_article, name='create_free_board_article'),
-    path('free_board/<int:article_pk>/', views.free_board_article_detail, name='free_board_article_detail'),
-    path('free_board/<int:article_pk>/edit/', views.edit_free_board_article, name='edit_free_board_article'),
-    path('free_board/<int:article_pk>/comment/', views.create_free_board_comment, name='create_free_board_comment'),
-    path('free_board/<int:article_pk>/comment/<int:comment_pk>/', views.edit_free_board_comment, name='edit_free_board_comment'),
-    path('free_board/<int:article_pk>/like/', views.like_free_board_article, name='like_free_board_article'),
+    path('', views.free_board_list, name='free_board_list'),
+    path('create/', views.create_free_board_article, name='create_free_board_article'),
+    path('<int:article_pk>/', views.free_board_article_detail, name='free_board_article_detail'),
+    path('<int:article_pk>/edit/', views.edit_free_board_article, name='edit_free_board_article'),
+    path('<int:article_pk>/comment/', views.create_free_board_comment, name='create_free_board_comment'),
+    path('<int:article_pk>/comment/<int:comment_pk>/', views.edit_free_board_comment, name='edit_free_board_comment'),
+    path('<int:article_pk>/like/', views.like_free_board_article, name='like_free_board_article'),
 ]
