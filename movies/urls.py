@@ -19,10 +19,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('movies/', views.movie_list, name='movie_list'),
-    path('movies/filter-genre/', views.movie_filter_by_genre, name='movie_filter_by_genre'),
-    path('movies/filter-actor/', views.movie_filter_by_actor, name='movie_filter_by_actor'),
-    path('movies/emotion_recommend/', views.emotion_based_movie_list, name='emotion_based_movie_list'),
-    path('movies/personal_recommend/', views.personal_based_movie_list, name='personal_based_movie_list'),
-    path('movies/personal_recommend/save/', views.save_selected_movie, name='save_selected_movie'),
+    path('', views.movie_list, name='movie_list'),
+    path('filter-genre/', views.movie_filter_by_genre, name='movie_filter_by_genre'),
+    path('filter-actor/', views.movie_filter_by_actor, name='movie_filter_by_actor'),
+    path('emotion_recommend/', views.emotion_based_movie_list, name='emotion_based_movie_list'),
+    path('personal_recommend/', views.personal_based_movie_list, name='personal_based_movie_list'),
+    path('personal_recommend/save/', views.save_selected_movie, name='save_selected_movie'),
 ]
