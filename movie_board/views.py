@@ -42,8 +42,7 @@ def edit_movie_board_article(request, article_pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)        
-
+        return Response({"message": "게시글 삭제 성공"}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_movie_board_comment(request, article_pk):

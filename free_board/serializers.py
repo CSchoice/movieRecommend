@@ -23,4 +23,4 @@ class FreeBoardCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = FreeBoardComment
         fields = '__all__'
-        read_only_fields = ('userId',)
+        read_only_fields = ('userId', 'article')

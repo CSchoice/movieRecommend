@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     path('', views.movie_board_list, name='movie_board_list'),
-    path('create/', views.create_movie_board_article, name='create_movie_board_article'),
+    path('create/<int:movie_id>/', views.create_movie_board_article, name='create_movie_board_article'),
     path('<int:article_pk>/', views.movie_board_article_detail, name='movie_board_article_detail'),
     path('<int:article_pk>/edit/', views.edit_movie_board_article, name='edit_movie_board_article'),
     path('<int:article_pk>/comment/', views.create_movie_board_comment, name='create_movie_board_comment'),

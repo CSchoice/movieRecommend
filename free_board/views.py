@@ -47,7 +47,7 @@ def edit_free_board_article(request, article_pk):
     # 게시글 삭제
     else:
         article.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "게시글 삭제 성공"}, status=status.HTTP_200_OK)
 
 # 댓글 작성
 @api_view(['POST'])
@@ -73,7 +73,8 @@ def edit_free_board_comment(request, article_pk, comment_pk):
     # 댓글 삭제
     else:
         comment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "댓글 삭제 성공"}, status=status.HTTP_200_OK)
+
     
 @api_view(['POST'])
 def like_free_board_article(request, article_pk):

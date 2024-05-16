@@ -6,6 +6,7 @@ class Genre(models.Model):
 
 
 class Movie(models.Model):
+    id = models.IntegerField()
     title = models.CharField(max_length=50)
     overview = models.CharField(max_length=400)
     release_date = models.DateField()
