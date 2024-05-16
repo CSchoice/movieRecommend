@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MovieBoardArticle, MovieBoardComment
+from .models import MovieBoardComment
 
 
 # class MovieBoardArticleListSerializer(serializers.ModelSerializer):
@@ -26,4 +26,4 @@ class MovieBoardCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieBoardComment
         fields = '__all__'
-        read_only_fields = ('user',)
+        read_only_fields = ('user', 'movie')

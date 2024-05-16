@@ -50,8 +50,8 @@ def save_movie_data(data):
         # 시리얼라이즈가 유효한지 확인하고 저장
         if serializer.is_valid():
             serializer.save()
-            return Response({'message':'영화 저장 성공'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        #     return Response({'message':'영화 저장 성공'}, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def movie_list(request):
