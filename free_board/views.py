@@ -39,7 +39,7 @@ def edit_free_board_article(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     # 게시글 수정
     if request.method == 'PUT':
-        serializer = FreeBoardArticleSerializer(article, data=request.data)
+        serializer = FreeBoardArticleSerializer(article, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -65,7 +65,7 @@ def edit_free_board_comment(request, article_pk, comment_pk):
     comment = get_object_or_404(FreeBoardComment, pk=comment_pk, article_id=article_pk)
     # 댓글 수정
     if request.method == 'PUT':   
-        serializer = FreeBoardCommentSerializer(comment, data=request.data)
+        serializer = FreeBoardCommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

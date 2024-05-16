@@ -35,7 +35,7 @@ def movie_board_article_detail(request, article_pk):
 def edit_movie_board_article(request, article_pk):
     if request.method == 'PUT':
         article = get_object_or_404(MovieBoardArticle, pk=article_pk)
-        serializer = MovieBoardArticleSerializer(article, data=request.data)
+        serializer = MovieBoardArticleSerializer(article, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -58,7 +58,7 @@ def create_movie_board_comment(request, article_pk):
 def edit_movie_board_comment(request, article_pk, comment_pk):
     comment = get_object_or_404(MovieBoardComment, pk=comment_pk)
     if request.method == 'PUT':
-        serializer = MovieBoardCommentSerializer(comment, data=request.data)
+        serializer = MovieBoardCommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
