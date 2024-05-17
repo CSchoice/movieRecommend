@@ -19,12 +19,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
-    # path('accounts/signup/', views.user_signup, name='user_signup'),
-    # path('accounts/login/', views.user_login, name='user_login'),
-    # path('accounts/logout/', views.user_logout, name='user_logout'),
-    # path('<int:user_pk>/control/', views.user_control, name='user_control'),
     path('<str:tar_username>/follow/', views.follow_user, name='user_follow'),
-    # path('check_login/', views.check_login, name='check_login'),
     path('<str:tar_username>/profile/', views.user_profile, name='user_profile'),
     path('<str:tar_username>/followings/', views.user_followings, name='user_followings'),
     path('<str:tar_username>/followers/', views.user_followers, name='user_followers'),
