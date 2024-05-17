@@ -3,10 +3,10 @@ from django.conf import settings
 
 class Genre(models.Model):
     name = models.CharField(max_length=20)
+    genre_id = models.IntegerField(unique=True)
 
 
 class Movie(models.Model):
-
     movie_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=50)
     overview = models.CharField(max_length=400)

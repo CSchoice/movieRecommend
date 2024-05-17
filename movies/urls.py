@@ -27,4 +27,5 @@ urlpatterns = [
     path('personal_recommend/save/', views.save_selected_movie, name='save_selected_movie'),
     # path('<int:movie_id>/like_movie/', views.like_movie, name='like_movie'),
     path('save_movie_data/',views.save_movie_data, name='save_movie_data'),
+    path('save_genre_data/',views.save_genre_data, name='save_genre_data'),
 ]
