@@ -9,11 +9,12 @@ from .serializers import (
     FreeBoardCommentSerializer,
     FreeBoardCommentListSerializer,
 )
+from rest_framework.renderers import JSONRenderer
 
 # 전체 게시물 조회
 @api_view(['GET'])
 def free_board_list(request):
-    articles = FreeBoardArticle.objects.all()
+    articles = FreeBoardArticle.objects.all().order_by('-created_at')
     serializer = FreeBoardArticleListSerializer(articles, many=True)
     return Response(serializer.data)
 
@@ -30,10 +31,10 @@ def create_free_board_article(request):
 @api_view(['GET'])
 def free_board_article_detail(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
-    comment = FreeBoardComment.objects.fileter(article=article)
+    comments = FreeBoardComment.objects.filter(article=article).order_by('-created_at')
     article_serializer = FreeBoardArticleSerializer(article)
-    comment_serializer = FreeBoardCommentListSerializer(comment)
-    return Response({article_serializer, comment_serializer})
+    comment_serializer = FreeBoardCommentListSerializer(comments, many=True)
+    return Response({'article': article_serializer.data, 'comments': comment_serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['PUT', 'DELETE'])
 def edit_free_board_article(request, article_pk):
@@ -59,7 +60,6 @@ def create_free_board_comment(request, article_pk):
         serializer.save(article=article, userId=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['PUT', 'DELETE'])
 def edit_free_board_comment(request, article_pk, comment_pk):

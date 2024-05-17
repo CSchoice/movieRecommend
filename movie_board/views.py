@@ -10,7 +10,7 @@ from movies.models import Movie
 
 @api_view(['GET'])
 def movie_board_comment_list(request, movie_pk):
-    comments = MovieBoardComment.objects.filter(movie_id=movie_pk)
+    comments = MovieBoardComment.objects.filter(movie_id=movie_pk).order_by('-created_at')
     serializer = MovieBoardCommentListSerializer(comments, many=True)
     return Response(serializer.data)
 
