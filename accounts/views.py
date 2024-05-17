@@ -6,6 +6,8 @@ from .models import User
 from .serializers import UserSerializer, CustomLoginSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 
 @api_view(['POST'])
 def custom_login_view(request):
@@ -77,3 +79,7 @@ def user_followers(request, tar_username):
     serializer = UserSerializer(followers, many=True)
     return Response(serializer.data)
 
+@api_view(['POST'])
+def get_csrf_token(request):
+    token = get_token(request)
+    return JsonResponse({'csrfToken': token})

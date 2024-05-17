@@ -40,14 +40,16 @@ def save_genre_data(request):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+from .models import Movie, Genre
+
 def save_movie_data(data):
     with open('movies/data/movie_data.json', 'r', encoding='utf-8') as f:
         movie_data = json.load(f)
     
     for item in movie_data:
+        # 각 영화에 대한 데이터 추출
         title = item.get('title')
         overview = item.get('overview')
-        print(item.get('release_date'))
         release_date_str = item.get('release_date')
         if release_date_str:  # release_date가 비어 있지 않은 경우
             try:
@@ -63,28 +65,23 @@ def save_movie_data(data):
         movie_id = item.get('id')
         genres = item.get('genre_ids')
 
-        # 장르를 PrimaryKeyRelatedField로 전달하여 시리얼라이저에 맞게 준비
-        genres_ids = []
+        # 영화 데이터 저장
+        movie = Movie.objects.create(
+            title=title,
+            overview=overview,
+            release_date=release_date,
+            popularity=popularity,
+            vote_average=vote_average,
+            poster_path=poster_path,
+            movie_id=movie_id,
+        )
+
+        # 각 장르에 대해 Genre 모델에 레코드 생성 및 연결
         for genre_id in genres:
-            genres_ids.append(genre_id)
+            genre, created = Genre.objects.get_or_create(genre_id=genre_id)
+            movie.genres.add(genre)
 
-        # 영화 데이터 시리얼라이즈
-        serializer = MovieSerializer(data={
-            'title': title,
-            'overview': overview,
-            'release_date': release_date,
-            'popularity': popularity,
-            'vote_average': vote_average,
-            'poster_path': poster_path,
-            'movie_id': movie_id,
-            'genres': genres_ids  # 시리얼라이저에 맞게 장르 id 리스트 전달
-        })
 
-        # 시리얼라이즈가 유효한지 확인하고 저장
-        if serializer.is_valid():
-            serializer.save()
-        #     return Response({'message':'영화 저장 성공'}, status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def movie_list(request):
