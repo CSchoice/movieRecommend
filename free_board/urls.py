@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     path('', views.free_board_list, name='free_board_list'),
-    path('create/', views.create_free_board_article, name='create_free_board_article'),
+    path('article/', views.create_free_board_article, name='create_free_board_article'),
     path('<int:article_pk>/', views.free_board_article_detail, name='free_board_article_detail'),
     path('<int:article_pk>/edit/', views.edit_free_board_article, name='edit_free_board_article'),
     path('<int:article_pk>/comment/', views.create_free_board_comment, name='create_free_board_comment'),

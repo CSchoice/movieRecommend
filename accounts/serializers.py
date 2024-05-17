@@ -9,9 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         
-
-
-
 class CustomRegisterSerializer(RegisterSerializer):
     nickname = serializers.CharField(max_length=20)
 
@@ -35,13 +32,13 @@ class CustomLoginSerializer(LoginSerializer):
         # username이 있는지 확인
         if not User.objects.filter(username=username).exists():
             raise serializers.ValidationError({
-                'username': '존재하지 않는 사용자 이름입니다.'
+                'message': '존재하지 않는 사용자 이름입니다.'
             })
 
         user = authenticate(username=username, password=password)
         if user is None:
             raise serializers.ValidationError({
-                'password': '비밀번호가 틀렸습니다.'
+                'message': '비밀번호가 틀렸습니다.'
             })
 
         if not user.is_active:

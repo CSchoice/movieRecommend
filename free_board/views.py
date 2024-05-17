@@ -30,9 +30,10 @@ def create_free_board_article(request):
 @api_view(['GET'])
 def free_board_article_detail(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
-    serializer = FreeBoardArticleSerializer(article)
-    return Response(serializer.data)
-
+    comment = FreeBoardComment.objects.fileter(article=article)
+    article_serializer = FreeBoardArticleSerializer(article)
+    comment_serializer = FreeBoardCommentListSerializer(comment)
+    return Response({article_serializer, comment_serializer})
 
 @api_view(['PUT', 'DELETE'])
 def edit_free_board_article(request, article_pk):

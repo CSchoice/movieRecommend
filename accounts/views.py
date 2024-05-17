@@ -14,7 +14,7 @@ def custom_login_view(request):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 # @api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
