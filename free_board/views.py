@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .models import FreeBoardArticle, FreeBoardComment
@@ -10,6 +10,7 @@ from .serializers import (
     FreeBoardCommentListSerializer,
 )
 from rest_framework.renderers import JSONRenderer
+from rest_framework.authentication import TokenAuthentication
 
 # 전체 게시물 조회
 @api_view(['GET'])
@@ -20,6 +21,7 @@ def free_board_list(request):
 
 # 게시글 작성
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
 def create_free_board_article(request):
     serializer = FreeBoardArticleSerializer(data=request.data)
     if serializer.is_valid():
