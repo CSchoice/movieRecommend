@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -35,6 +36,7 @@ def custom_login_view(request):
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def follow_user(request, tar_username):
     follower = request.user
@@ -57,6 +59,7 @@ def follow_user(request, tar_username):
 #     return Response({"message": "로그인 되지 않음"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny])
 def user_profile(request, tar_username):
     user = get_object_or_404(User, username=tar_username)
@@ -64,6 +67,7 @@ def user_profile(request, tar_username):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny])
 def user_followings(request, tar_username):
     user = get_object_or_404(User, username=tar_username)
@@ -72,6 +76,7 @@ def user_followings(request, tar_username):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny])
 def user_followers(request, tar_username):
     user = get_object_or_404(User, username=tar_username)
@@ -80,6 +85,7 @@ def user_followers(request, tar_username):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})

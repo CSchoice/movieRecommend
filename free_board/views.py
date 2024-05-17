@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .models import FreeBoardArticle, FreeBoardComment
@@ -11,9 +10,11 @@ from .serializers import (
 )
 from rest_framework.renderers import JSONRenderer
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes
 
 # 전체 게시물 조회
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 def free_board_list(request):
     articles = FreeBoardArticle.objects.all().order_by('-created_at')
     serializer = FreeBoardArticleListSerializer(articles, many=True)
@@ -31,6 +32,7 @@ def create_free_board_article(request):
 
 # 게시글 상세 정보 조회
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
 def free_board_article_detail(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     comments = FreeBoardComment.objects.filter(article=article).order_by('-created_at')
@@ -39,6 +41,7 @@ def free_board_article_detail(request, article_pk):
     return Response({'article': article_serializer.data, 'comments': comment_serializer.data}, status=status.HTTP_200_OK)
 
 @api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
 def edit_free_board_article(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     # 게시글 수정
@@ -55,6 +58,7 @@ def edit_free_board_article(request, article_pk):
 
 # 댓글 작성
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
 def create_free_board_comment(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     serializer = FreeBoardCommentSerializer(data=request.data)
@@ -64,6 +68,7 @@ def create_free_board_comment(request, article_pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
 def edit_free_board_comment(request, article_pk, comment_pk):
     comment = get_object_or_404(FreeBoardComment, pk=comment_pk, article_id=article_pk)
     # 댓글 수정
@@ -80,6 +85,7 @@ def edit_free_board_comment(request, article_pk, comment_pk):
 
     
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
 def like_free_board_article(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     if article.like_user.filter(pk=request.user.pk).exists():
