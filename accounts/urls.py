@@ -19,6 +19,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 urlpatterns = [
+    path('login/', views.custom_login_view, name='custom_login'),
     path('<str:tar_username>/follow/', views.follow_user, name='user_follow'),
     path('<str:tar_username>/profile/', views.user_profile, name='user_profile'),
     path('<str:tar_username>/followings/', views.user_followings, name='user_followings'),

@@ -3,8 +3,18 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, CustomLoginSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
+
+@api_view(['POST'])
+def custom_login_view(request):
+    serializer = CustomLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
@@ -66,3 +76,4 @@ def user_followers(request, tar_username):
     followers = user.followers.all()
     serializer = UserSerializer(followers, many=True)
     return Response(serializer.data)
+

@@ -190,6 +190,7 @@ REST_AUTH = {
 }
 
 # 커스텀 시리얼라이저 사용
-# REST_AUTH_REGISTER_SERIALIZERS = {
-#     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
-# }
+REST_AUTH_REGISTER_SERIALIZERS = {
+    # 'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    'LOGIN_SERIALIZER': 'your_app.serializers.CustomLoginSerializer',
+}
