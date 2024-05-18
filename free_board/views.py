@@ -26,7 +26,7 @@ def free_board_list(request):
 def create_free_board_article(request):
     serializer = FreeBoardArticleSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(userId=request.user)
+        serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,7 +63,7 @@ def create_free_board_comment(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     serializer = FreeBoardCommentSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(article=article, userId=request.user)
+        serializer.save(article=article, user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

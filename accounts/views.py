@@ -61,8 +61,8 @@ def follow_user(request, tar_username):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny])
-def user_profile(request, tar_username):
-    user = get_object_or_404(User, username=tar_username)
+def user_profile(request, tar_user_pk):
+    user = get_object_or_404(User, pk=tar_user_pk)
     serializer = UserSerializer(user)
     return Response(serializer.data)
 

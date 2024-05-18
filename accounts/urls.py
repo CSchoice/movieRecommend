@@ -21,7 +21,7 @@ from . import views
 urlpatterns = [
     path('login/', views.custom_login_view, name='custom_login'),
     path('<str:tar_username>/follow/', views.follow_user, name='user_follow'),
-    path('<str:tar_username>/profile/', views.user_profile, name='user_profile'),
+    path('<str:tar_user_pk>/profile/', views.user_profile, name='user_profile'),
     path('<str:tar_username>/followings/', views.user_followings, name='user_followings'),
     path('<str:tar_username>/followers/', views.user_followers, name='user_followers'),
     path('api-token-auth/', obtain_auth_token),
