@@ -19,6 +19,7 @@ from .models import MovieBoardComment
 class MovieBoardCommentListSerializer(serializers.ModelSerializer):
     comments_cnt = serializers.SerializerMethodField()
     user_nickname = serializers.SerializerMethodField()
+
     class Meta:
         model = MovieBoardComment
         # fields = ('id', 'content', 'userId')
@@ -29,9 +30,14 @@ class MovieBoardCommentListSerializer(serializers.ModelSerializer):
 
     def get_user_nickname(self, obj):
         return obj.user.nickname if obj.user else None
-        
+    
+    username = serializers.SerializerMethodField()   
+    def get_username(self, obj):
+        return obj.user.username if obj.user else None
+    
 class MovieBoardCommentSerializer(serializers.ModelSerializer):
     user_nickname = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()   
     class Meta:
         model = MovieBoardComment
         fields = '__all__'
@@ -39,4 +45,7 @@ class MovieBoardCommentSerializer(serializers.ModelSerializer):
         
     def get_user_nickname(self, obj):
         return obj.user.nickname if obj.user else None
+
+    def get_username(self, obj):
+        return obj.user.username if obj.user else None
 

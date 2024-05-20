@@ -7,6 +7,19 @@ import json
 from datetime import datetime
 from .models import Movie, Genre
 from .serializers import MovieSerializer
+import random
+
+@api_view(['POST'])
+def movie_list(request):
+    movies = Movie.objects.all()
+    print(movies)
+    movies = Movie.objects.filter(vote_average__gt=6.5)
+    ran_size = min(5, movies.count())
+    movies = random.sample(list(movies), ran_size)
+    serializer = MovieSerializer(movies, many=True)
+    print(serializer)
+    return Response(serializer.data, status=status.HTTP_200_OK)  
+
 
 @api_view(['POST'])
 def save_genre_data(request):

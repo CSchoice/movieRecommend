@@ -8,7 +8,6 @@ from .serializers import (
     FreeBoardCommentSerializer,
     FreeBoardCommentListSerializer,
 )
-from rest_framework.renderers import JSONRenderer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes
 
