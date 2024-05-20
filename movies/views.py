@@ -17,7 +17,6 @@ def movie_list(request):
     serializer = MovieSerializer(movies, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 def save_genre_data(request):
     data = [
@@ -44,11 +43,17 @@ def save_genre_data(request):
 
     try:
         for item in data:
-            Genre.objects.update_or_create(genre_id=item['pk'], defaults={'name': item['name']})
+            Genre.objects.update_or_create(db_genre_id=item['pk'], defaults={'name': item['name']})
         return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
     
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+from rest_framework.response import Response
+from rest_framework import status
+from datetime import datetime
+import json
+from .models import Movie, Genre
 
 @api_view(['GET'])
 def save_movie_data(data):
@@ -68,11 +73,13 @@ def save_movie_data(data):
                 continue
             
         else:
-            release_date = None  # release_date가 비어 있으면 None을 할당
+            release_date = None
         popularity = item.get('popularity')
         vote_average = item.get('vote_average')
         poster_path = item.get('poster_path')
         movie_id = item.get('id')
+        if Movie.objects.filter(db_movie_id=movie_id).exists(): continue
+
         genres = item.get('genre_ids')
         # 영화 데이터 저장
         movie = Movie.objects.create(
@@ -82,14 +89,14 @@ def save_movie_data(data):
             popularity=popularity,
             vote_average=vote_average,
             poster_path=poster_path,
-            movie_id=movie_id,
+            db_movie_id=movie_id,
         )
 
         # 각 장르에 대해 Genre 모델에 레코드 생성 및 연결
         for genre_id in genres:
-            genre, created = Genre.objects.get_or_create(genre_id=genre_id)
+            genre, created = Genre.objects.get_or_create(db_genre_id=genre_id)
             movie.genres.add(genre)
-        return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
+    return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 def movie_filter_by_genre(request, genre_name):
@@ -120,7 +127,7 @@ def save_selected_movie(request):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 def like_movie(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
+    movie = get_object_or_404(Movie, db_movie_id=movie_id)
     if movie.like_user.filter(pk=request.user.pk).exists():
         # 이미 좋아요를 한 경우, 좋아요 취소
         movie.like_user.remove(request.user)
@@ -129,3 +136,42 @@ def like_movie(request, movie_id):
         # 좋아요 추가
         movie.like_user.add(request.user)
         return Response({"message": "게시글 좋아요 성공"}, status=status.HTTP_200_OK)
+    
+    
+import json
+from datetime import datetime
+from .models import Movie, Actor, Genre
+
+@api_view(['GET'])
+def save_actor_data(request):
+    with open('movies/data/actor_data.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    for item in data:
+        movie_id = item["id"]
+        cast_list = item["cast"]
+
+        # 영화 정보 생성
+        movie = Movie.objects.get(
+            db_movie_id=movie_id,
+            # 다른 필드들을 설정하십시오.
+        )
+
+        # 배우 정보 생성 및 연결
+        for cast_data in cast_list:
+            actor_id = cast_data["id"]
+            actor, _ = Actor.objects.get_or_create(
+                db_actor_id=actor_id,
+                defaults={
+                "name": cast_data["name"],
+                "profile_path": cast_data["profile_path"],
+                "character": cast_data["character"],
+                }
+            )
+            movie.actors.add(actor)
+
+        # 장르 정보 생성 및 연결
+        # 필요하다면 비슷한 방식으로 장르 정보를 처리할 수 있습니다.
+
+        # 영화 정보 저장
+        movie.save()
