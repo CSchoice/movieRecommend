@@ -7,8 +7,7 @@ from .models import User
 from .serializers import UserSerializer, CustomLoginSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-# from django.middleware.csrf import get_token
-# from django.http import JsonResponse
+
 
 @api_view(['POST'])
 def custom_login_view(request):
@@ -36,12 +35,6 @@ def follow_user(request, tar_username):
     follower.save()
     return Response({"message": message}, status=status.HTTP_200_OK)
 
-# @api_view(['POST'])
-# def check_login(request):
-#     if request.user.is_authenticated:
-#         return Response({"message": "로그인 됨."}, status=status.HTTP_200_OK)
-#     return Response({"message": "로그인 되지 않음"}, status=status.HTTP_200_OK)
-
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny])
@@ -67,9 +60,3 @@ def user_followers(request, tar_username):
     followers = user.followers.all()
     serializer = UserSerializer(followers, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-# @api_view(['POST'])
-# @authentication_classes([TokenAuthentication])
-# def get_csrf_token(request):
-#     token = get_token(request)
-#     return JsonResponse({'csrfToken': token})

@@ -27,5 +27,4 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token),
     path('', include('dj_rest_auth.urls')),
     path('registration/', include('dj_rest_auth.registration.urls')),
-    # path('csrf/', views.get_csrf_token, name='get_csrf_token'),
 ]

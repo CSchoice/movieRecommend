@@ -121,16 +121,16 @@ def save_selected_movie(request):
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-def like_movie(request, movie_id):
-    movie = get_object_or_404(Movie, db_movie_id=movie_id)
+def like_movie(request, db_movie_id):
+    movie = get_object_or_404(Movie, db_movie_id=db_movie_id)
     if movie.like_user.filter(pk=request.user.pk).exists():
         # 이미 좋아요를 한 경우, 좋아요 취소
         movie.like_user.remove(request.user)
-        return Response({"message": "게시글 좋아요 취소"}, status=status.HTTP_200_OK)
+        return Response({"message": "영화 좋아요 취소"}, status=status.HTTP_200_OK)
     else:
         # 좋아요 추가
         movie.like_user.add(request.user)
-        return Response({"message": "게시글 좋아요 성공"}, status=status.HTTP_200_OK)
+        return Response({"message": "영화 좋아요 성공"}, status=status.HTTP_200_OK)
     
     
 import json

@@ -19,7 +19,7 @@ class Movie(models.Model):
     popularity = models.FloatField(blank=True, null=True)
     vote_average = models.FloatField(blank=True, null=True)
     poster_path = models.CharField(max_length=200)
-    like_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_movies', null=True)
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_movies', null=True)
     actors = models.ManyToManyField(Actor, blank=True)
     genres = models.ManyToManyField(Genre)
 
