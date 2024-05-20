@@ -27,7 +27,7 @@ class MovieBoardCommentListSerializer(serializers.ModelSerializer):
 
     def get_comments_cnt(self, obj):
         return MovieBoardComment.objects.filter(movie=obj.movie).count()
-
+ 
     def get_user_nickname(self, obj):
         return obj.user.nickname if obj.user else None
     

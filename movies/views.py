@@ -6,7 +6,7 @@ from rest_framework import status
 import json
 from datetime import datetime
 from .models import Movie, Genre
-from .serializers import MovieSerializer
+from .serializers import MovieSerializer, MovieListSerializer
 import random
 
 @api_view(['GET'])
@@ -14,7 +14,7 @@ def movie_list(request):
     movies = Movie.objects.filter(vote_average__gt=7)
     ran_size = min(10, movies.count())
     movies = random.sample(list(movies), ran_size)
-    serializer = MovieSerializer(movies, many=True)
+    serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -48,12 +48,6 @@ def save_genre_data(request):
     
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-from rest_framework.response import Response
-from rest_framework import status
-from datetime import datetime
-import json
-from .models import Movie, Genre
 
 @api_view(['GET'])
 def save_movie_data(data):
@@ -104,15 +98,16 @@ def movie_filter_by_genre(request, genre_name):
     movies = Movie.objects.filter(genres=genre)
     ran_size = min(10, movies.count())
     movies = random.sample(list(movies), ran_size)
-    serializer = MovieSerializer(movies, many=True)
+    serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def movie_filter_by_actor(request, actor_name):
-    # movies = Movie.objects.filter(actor=actor)
+def movie_filter_by_actor(request, db_actor_id):
+    actor = get_object_or_404(Actor, db_actor_id=db_actor_id)
+    movies = Movie.objects.filter(actors=actor)
     ran_size = min(10, movies.count())
     movies = random.sample(list(movies), ran_size)
-    serializer = MovieSerializer(movies, many=True)
+    serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 def emotion_based_movie_list(request):

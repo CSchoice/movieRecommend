@@ -21,7 +21,7 @@ from . import views
 urlpatterns = [
     path('list/', views.movie_list, name='movie_list'),
     path('filter-genre/<str:genre_name>/', views.movie_filter_by_genre, name='movie_filter_by_genre'),
-    path('filter-actor/<str:actor_name>/', views.movie_filter_by_actor, name='movie_filter_by_actor'),
+    path('filter-actor/<int:db_actor_id>/', views.movie_filter_by_actor, name='movie_filter_by_actor'),
     path('emotion_recommend/', views.emotion_based_movie_list, name='emotion_based_movie_list'),
     path('personal_recommend/', views.personal_based_movie_list, name='personal_based_movie_list'),
     path('personal_recommend/save/', views.save_selected_movie, name='save_selected_movie'),
