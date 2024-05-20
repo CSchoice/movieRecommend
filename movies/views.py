@@ -9,16 +9,13 @@ from .models import Movie, Genre
 from .serializers import MovieSerializer
 import random
 
-@api_view(['POST'])
+@api_view(['GET'])
 def movie_list(request):
-    movies = Movie.objects.all()
-    print(movies)
-    movies = Movie.objects.filter(vote_average__gt=6.5)
-    ran_size = min(5, movies.count())
+    movies = Movie.objects.filter(vote_average__gt=7)
+    ran_size = min(10, movies.count())
     movies = random.sample(list(movies), ran_size)
     serializer = MovieSerializer(movies, many=True)
-    print(serializer)
-    return Response(serializer.data, status=status.HTTP_200_OK)  
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -48,14 +45,12 @@ def save_genre_data(request):
     try:
         for item in data:
             Genre.objects.update_or_create(genre_id=item['pk'], defaults={'name': item['name']})
-
-        return Response({'message': 'Data saved successfully'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
+    
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-from .models import Movie, Genre
-
+@api_view(['GET'])
 def save_movie_data(data):
     with open('movies/data/movie_data.json', 'r', encoding='utf-8') as f:
         movie_data = json.load(f)
@@ -71,6 +66,7 @@ def save_movie_data(data):
             except ValueError:
                 print(f"Invalid date format for movie: {title}. Skipping...")
                 continue
+            
         else:
             release_date = None  # release_date가 비어 있으면 None을 할당
         popularity = item.get('popularity')
@@ -78,7 +74,6 @@ def save_movie_data(data):
         poster_path = item.get('poster_path')
         movie_id = item.get('id')
         genres = item.get('genre_ids')
-
         # 영화 데이터 저장
         movie = Movie.objects.create(
             title=title,
@@ -94,18 +89,27 @@ def save_movie_data(data):
         for genre_id in genres:
             genre, created = Genre.objects.get_or_create(genre_id=genre_id)
             movie.genres.add(genre)
+        return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
 
-
-
-
-def movie_list(request):
-    pass
-
-def movie_filter_by_genre(request):
-    pass
+@api_view(['GET'])
+def movie_filter_by_genre(request, genre_name):
+    genre = get_object_or_404(Genre, name=genre_name)
+    movies = Movie.objects.filter(genres=genre)
+    ran_size = min(10, movies.count())
+    movies = random.sample(list(movies), ran_size)
+    serializer = MovieSerializer(movies, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def movie_filter_by_actor(request):
     pass
+
+@api_view(['GET'])
+def movie_filter_by_actor(request, actor_name):
+    movies = Movie.objects.filter(actor=actor)
+    ran_size = min(10, movies.count())
+    movies = random.sample(list(movies), ran_size)
+    serializer = MovieSerializer(movies, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def emotion_based_movie_list(request):
     pass
