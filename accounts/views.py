@@ -7,8 +7,8 @@ from .models import User
 from .serializers import UserSerializer, CustomLoginSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-from django.middleware.csrf import get_token
-from django.http import JsonResponse
+# from django.middleware.csrf import get_token
+# from django.http import JsonResponse
 
 @api_view(['POST'])
 def custom_login_view(request):
@@ -18,22 +18,6 @@ def custom_login_view(request):
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
-# @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
-# def user_control(request, user_pk):
-#     user = get_object_or_404(User, pk=user_pk)
-    
-#     if request.method == 'GET':
-#         serializer = UserSerializer(user)
-#         return Response(serializer.data)
-    
-#     elif request.method == 'POST':
-#         serializer = UserSerializer(user, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -61,10 +45,10 @@ def follow_user(request, tar_username):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny])
-def user_profile(request, tar_user_pk):
-    user = get_object_or_404(User, pk=tar_user_pk)
+def user_profile(request, tar_username):
+    user = get_object_or_404(User, username=tar_username)
     serializer = UserSerializer(user)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -73,7 +57,7 @@ def user_followings(request, tar_username):
     user = get_object_or_404(User, username=tar_username)
     followings = user.followings.all()
     serializer = UserSerializer(followings, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -82,10 +66,10 @@ def user_followers(request, tar_username):
     user = get_object_or_404(User, username=tar_username)
     followers = user.followers.all()
     serializer = UserSerializer(followers, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-def get_csrf_token(request):
-    token = get_token(request)
-    return JsonResponse({'csrfToken': token})
+# @api_view(['POST'])
+# @authentication_classes([TokenAuthentication])
+# def get_csrf_token(request):
+#     token = get_token(request)
+#     return JsonResponse({'csrfToken': token})

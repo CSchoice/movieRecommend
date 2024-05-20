@@ -21,11 +21,11 @@ from . import views
 urlpatterns = [
     path('login/', views.custom_login_view, name='custom_login'),
     path('<str:tar_username>/follow/', views.follow_user, name='user_follow'),
-    path('<int:tar_user_pk>/profile/', views.user_profile, name='user_profile'),
+    path('<str:tar_username>/profile/', views.user_profile, name='user_profile'),
     path('<str:tar_username>/followings/', views.user_followings, name='user_followings'),
     path('<str:tar_username>/followers/', views.user_followers, name='user_followers'),
     path('api-token-auth/', obtain_auth_token),
     path('', include('dj_rest_auth.urls')),
     path('registration/', include('dj_rest_auth.registration.urls')),
-    path('csrf/', views.get_csrf_token, name='get_csrf_token'),
+    # path('csrf/', views.get_csrf_token, name='get_csrf_token'),
 ]
