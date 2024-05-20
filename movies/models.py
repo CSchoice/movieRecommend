@@ -16,6 +16,7 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre)
     like_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='liked_movies', null=True)
 
+
 # class likedMovie(models.Model):
 #     title = models.CharField(max_length=50)
 #     overview = models.CharField(max_length=400)
