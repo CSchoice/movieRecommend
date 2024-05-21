@@ -311,12 +311,17 @@ def like_movie(request, db_movie_id):
         movie.like_user.add(request.user)
         return Response({"message": "영화 좋아요 성공"}, status=status.HTTP_200_OK)
     
-    
-
-
 @api_view(['GET'])
 def movie_detail(request, db_movie_id):
     movie = get_object_or_404(Movie, db_movie_id=db_movie_id)
     serializer = MovieListSerializer(movie)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def movie_exist(request, db_movie_id):
+    try:
+        movie = Movie.objects.get(db_movie_id=db_movie_id)
+        serializer = MovieListSerializer(movie)
+        return Response({"message": "영화가 db에 있습니다", "movie": serializer.data}, status=status.HTTP_200_OK)
+    except:
+        return Response({"message": "영화가 db에 없습니다"}, status=status.HTTP_200_OK)
