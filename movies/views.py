@@ -181,11 +181,11 @@ def save_new_movie_data(request, db_movie_id):
         # 장르 데이터 저장
         if created:  # 새로운 영화인 경우에만
             for genre_id in genre_ids:
-                genre, _ = Genre.objects.get_or_create(genre_id=genre_id)
+                genre, _ = Genre.objects.get_or_create(db_genre_id=genre_id)  # 이 부분을 수정합니다.
                 movie.genres.add(genre)
         
         # 배우 정보 저장
-    url = "https://api.themoviedb.org/3/movie/movie_id/credits?language=en-US"
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language=ko-KR"
 
     headers = {
         "accept": "application/json",
@@ -193,9 +193,11 @@ def save_new_movie_data(request, db_movie_id):
     }
 
     response = requests.get(url, headers=headers)
-
-    for item in data:
-        movie_id = item["id"]
+    from pprint import pprint
+    if response.status_code == 200:
+        item = response.json()
+        pprint(item)
+        # movie_id = item["id"]
         cast_list = item["cast"]
 
         # 영화 정보 생성
@@ -203,7 +205,7 @@ def save_new_movie_data(request, db_movie_id):
             db_movie_id=movie_id,
             # 다른 필드들을 설정하십시오.
         )
-
+        pprint(cast_list)
         # 배우 정보 생성 및 연결
         for cast_data in cast_list:
             actor_id = cast_data["id"]
@@ -215,6 +217,7 @@ def save_new_movie_data(request, db_movie_id):
                 "character": cast_data["character"],
                 }
             )
+
             movie.actors.add(actor)
         
         return Response({'message': 'Movie data saved successfully.'}, status=200)
@@ -224,8 +227,12 @@ def save_new_movie_data(request, db_movie_id):
 
 @api_view(['GET'])
 def save_new_actor_data(request):
-    with open('movies/data/actor_data.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    url = "https://api.themoviedb.org/3/movie/movie_id/credits?language=en-US"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBmZjQxMDZkN2M3NWQ4YThiMDYwNzhlMzUxMjgwZiIsInN1YiI6IjY2Mjc0MzliYWY5NTkwMDE2NDY5MzQ5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JAyRCq0NoCjWHtBG6mp5xtIMvf5gpqgJTg_7S-SGTa0"
+    }
 
     for item in data:
         movie_id = item["id"]
