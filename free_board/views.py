@@ -82,7 +82,6 @@ def edit_free_board_comment(request, article_pk, comment_pk):
         comment.delete()
         return Response({"message": "댓글 삭제 성공"}, status=status.HTTP_200_OK)
 
-    
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 def like_free_board_article(request, article_pk):
@@ -95,3 +94,4 @@ def like_free_board_article(request, article_pk):
         # 좋아요 추가
         article.like_user.add(request.user)
         return Response({"message": "게시글 좋아요 성공"}, status=status.HTTP_200_OK)
+    

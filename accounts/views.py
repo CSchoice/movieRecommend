@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -7,7 +7,6 @@ from .models import User
 from .serializers import UserSerializer, CustomLoginSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
-
 
 @api_view(['POST'])
 def custom_login_view(request):
