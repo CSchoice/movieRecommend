@@ -19,7 +19,7 @@ def movie_board_comment_list(request, movie_pk):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 def create_movie_board_comment(request, movie_id):
-    movie = get_object_or_404(Movie, movie_id=movie_id)
+    movie = get_object_or_404(Movie, db_movie_id=movie_id)
     serializer = MovieBoardCommentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(movie=movie, user=request.user)

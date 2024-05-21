@@ -13,6 +13,7 @@ class MovieSerializer(serializers.ModelSerializer):
 class MovieListSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField()
     actors = serializers.SerializerMethodField()
+    like_user = serializers.SerializerMethodField()
 
     class Meta:
         model = Movie
@@ -24,3 +25,7 @@ class MovieListSerializer(serializers.ModelSerializer):
 
     def get_genres(self, obj):
         return [genre.name for genre in obj.genres.all()]
+
+    def get_like_user(self, obj):
+        return [{'username': user.username, 'id': user.id} for user in obj.like_user.all()]
+    

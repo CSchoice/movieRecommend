@@ -170,3 +170,9 @@ def save_actor_data(request):
 
         # 영화 정보 저장
         movie.save()
+
+@api_view(['GET'])
+def movie_detail(request, db_movie_id):
+    movie = get_object_or_404(Movie, db_movie_id=db_movie_id)
+    serializer = MovieListSerializer(movie)
+    return Response(serializer.data)
