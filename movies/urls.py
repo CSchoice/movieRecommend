@@ -31,6 +31,6 @@ urlpatterns = [
     path('save_movie_data/',views.save_movie_data, name='save_movie_data'),
     path('save_genre_data/',views.save_genre_data, name='save_genre_data'),
     path('save_actor_data/',views.save_actor_data, name='save_actor_data'),
-    path('save_new_movie_data/',views.save_new_movie_data, name='save_new_movie_data'),
+    path('save_new_movie_data/<int:db_movie_id>/',views.save_new_movie_data, name='save_new_movie_data'),
 
 ]

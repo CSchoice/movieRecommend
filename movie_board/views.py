@@ -12,7 +12,8 @@ from rest_framework.decorators import api_view, authentication_classes
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 def movie_board_comment_list(request, movie_pk):
-    comments = MovieBoardComment.objects.filter(db_movie_id=movie_pk).order_by('-created_at')
+    movie = Movie.objects.get(db_movie_id=movie_pk)
+    comments = MovieBoardComment.objects.filter(movie=movie).order_by('-created_at')
     serializer = MovieBoardCommentListSerializer(comments, many=True)
     return Response(serializer.data)
 

@@ -10,6 +10,7 @@ from .serializers import MovieSerializer, MovieListSerializer
 import random
 from .models import Movie, Actor, Genre
 import requests
+from decouple import config
 
 @api_view(['GET'])
 def movie_list(request):
@@ -130,14 +131,17 @@ def save_actor_data(request):
     return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
-def save_new_movie_data(request, db_movie_pk):
-    url = f"https://api.themoviedb.org/3/movie/{db_movie_pk}?language=ko-KR"
+def save_new_movie_data(request, db_movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{db_movie_id}?language=ko-KR"
 
-    headers = {"accept": "application/json"}
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer 970ff4106d7c75d8a8b06078e351280f"
+        }
 
     response = requests.get(url, headers=headers)
 
-    print(response.text)
+    print(response.text, '--------------------------------')
     
     item = response.text
         # 각 영화에 대한 데이터 추출
