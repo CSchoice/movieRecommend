@@ -4,9 +4,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
+from movies.models import Movie
 from .serializers import UserSerializer, CustomLoginSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
+from movies.serializers import MovieListSerializer
 
 @api_view(['POST'])
 def custom_login_view(request):
@@ -58,4 +60,13 @@ def user_followers(request, tar_username):
     user = get_object_or_404(User, username=tar_username)
     followers = user.followers.all()
     serializer = UserSerializer(followers, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([AllowAny])
+def like_movie(request, tar_username):
+    user = get_object_or_404(User, username=tar_username)
+    movies = Movie.objects.filter(like_user=user)
+    serializer = MovieListSerializer(movies, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

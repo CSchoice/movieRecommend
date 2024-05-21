@@ -1,14 +1,12 @@
 import requests
 
-db_movie_id = 1022789
-
-url = f"https://api.themoviedb.org/3/movie/{db_movie_id}?language=ko-KR"
+url = "https://api.themoviedb.org/3/movie/1022789?language=en-US"
 
 headers = {
     "accept": "application/json",
-    "Authorization": "Bearer 970ff4106d7c75d8a8b06078e351280f"
-    }
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBmZjQxMDZkN2M3NWQ4YThiMDYwNzhlMzUxMjgwZiIsInN1YiI6IjY2Mjc0MzliYWY5NTkwMDE2NDY5MzQ5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JAyRCq0NoCjWHtBG6mp5xtIMvf5gpqgJTg_7S-SGTa0"
+}
 
 response = requests.get(url, headers=headers)
 
-print(response.text, '--------------------------------')
+print(response.text)

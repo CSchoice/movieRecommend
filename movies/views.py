@@ -136,44 +136,90 @@ def save_new_movie_data(request, db_movie_id):
 
     headers = {
         "accept": "application/json",
-        "Authorization": "Bearer 970ff4106d7c75d8a8b06078e351280f"
-        }
+        "Authorization": f"Bearer {config('TMDB_KEY')}"
+    }
+
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        item = response.json()
+        
+        # 각 영화에 대한 데이터 추출
+        title = item.get('title')
+        overview = item.get('overview')
+        release_date_str = item.get('release_date')
+        if release_date_str:  # release_date가 비어 있지 않은 경우
+            try:
+                release_date = datetime.strptime(release_date_str, '%Y-%m-%d').date()
+            except ValueError:
+                print(f"Invalid date format for movie: {title}. Skipping...")
+                return Response({'message': f"Invalid date format for movie: {title}. Skipping..."}, status=400)
+        else:
+            release_date = None
+        popularity = item.get('popularity')
+        vote_average = item.get('vote_average')
+        poster_path = item.get('poster_path')
+        movie_id = item.get('id')
+        genres = item.get('genres')
+        
+        # 장르 데이터 추출
+        genre_ids = [genre['id'] for genre in genres] if genres else []
+        
+        # 영화 데이터 저장
+        movie, created = Movie.objects.get_or_create(
+            db_movie_id=movie_id,
+            defaults={
+                'title': title,
+                'overview': overview,
+                'release_date': release_date,
+                'popularity': popularity,
+                'vote_average': vote_average,
+                'poster_path': poster_path,
+            }
+        )
+        
+        # 장르 데이터 저장
+        if created:  # 새로운 영화인 경우에만
+            for genre_id in genre_ids:
+                genre, _ = Genre.objects.get_or_create(genre_id=genre_id)
+                movie.genres.add(genre)
+        
+        # 배우 정보 저장
+    url = "https://api.themoviedb.org/3/movie/movie_id/credits?language=en-US"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBmZjQxMDZkN2M3NWQ4YThiMDYwNzhlMzUxMjgwZiIsInN1YiI6IjY2Mjc0MzliYWY5NTkwMDE2NDY5MzQ5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JAyRCq0NoCjWHtBG6mp5xtIMvf5gpqgJTg_7S-SGTa0"
+    }
 
     response = requests.get(url, headers=headers)
 
-    print(response.text, '--------------------------------')
-    
-    item = response.text
-        # 각 영화에 대한 데이터 추출
-    title = item.get('title')
-    overview = item.get('overview')
-    release_date_str = item.get('release_date')
-    if release_date_str:  # release_date가 비어 있지 않은 경우
-        try:
-            release_date = datetime.strptime(release_date_str, '%Y-%m-%d').date()
-        except ValueError:
-            print(f"Invalid date format for movie: {title}. Skipping...")
-        
-    else:
-        release_date = None
-    popularity = item.get('popularity')
-    vote_average = item.get('vote_average')
-    poster_path = item.get('poster_path')
-    movie_id = item.get('id')
-    # if Movie.objects.filter(db_movie_id=movie_id).exists():
-    #     message = 'db에 영화가 정보가 있습니다.'
+    for item in data:
+        movie_id = item["id"]
+        cast_list = item["cast"]
 
-    genres = item.get('genre_ids')
-    # 영화 데이터 저장
-    movie = Movie.objects.create(
-        title=title,
-        overview=overview,
-        release_date=release_date,
-        popularity=popularity,
-        vote_average=vote_average,
-        poster_path=poster_path,
-        db_movie_id=movie_id,
-    )
+        # 영화 정보 생성
+        movie = Movie.objects.get(
+            db_movie_id=movie_id,
+            # 다른 필드들을 설정하십시오.
+        )
+
+        # 배우 정보 생성 및 연결
+        for cast_data in cast_list:
+            actor_id = cast_data["id"]
+            actor, _ = Actor.objects.get_or_create(
+                db_actor_id=actor_id,
+                defaults={
+                "name": cast_data["name"],
+                "profile_path": cast_data["profile_path"],
+                "character": cast_data["character"],
+                }
+            )
+            movie.actors.add(actor)
+        
+        return Response({'message': 'Movie data saved successfully.'}, status=200)
+    else:
+        return Response({'message': 'Failed to fetch movie data from API.'}, status=500)
 
 
 @api_view(['GET'])
