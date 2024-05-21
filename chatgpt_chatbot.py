@@ -1,7 +1,9 @@
 import openai
+from decouple import config
 
-# OpenAI API 키 설정
-openai.api_key = 'sk-proj-Vg67oj0tLNOVqO4HeyoJT3BlbkFJHOSZXr9VRLoPofam5kd9'
+# API 키 설정
+OPENAI_API_KEY = config('GPT_KEY')
+TMDB_API_KEY = '970ff4106d7c75d8a8b06078e351280f'
 
 def get_movie_recommendation(messages):
     response = openai.ChatCompletion.create(

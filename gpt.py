@@ -1,8 +1,8 @@
 import openai
-import requests
+from decouple import config
 
 # API 키 설정
-OPENAI_API_KEY = 'sk-proj-Vg67oj0tLNOVqO4HeyoJT3BlbkFJHOSZXr9VRLoPofam5kd9'
+OPENAI_API_KEY = config('GPT_KEY')
 TMDB_API_KEY = '970ff4106d7c75d8a8b06078e351280f'
 
 openai.api_key = OPENAI_API_KEY
