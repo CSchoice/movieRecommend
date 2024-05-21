@@ -20,11 +20,13 @@ class MovieListSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ()
 
+    def get_genres(self, obj):
+        return [genre.name for genre in obj.genres.all()]
+
     def get_actors(self, obj):
         return [(actor.name, actor.db_actor_id, actor.profile_path) for actor in obj.actors.all()]
 
-    def get_genres(self, obj):
-        return [genre.name for genre in obj.genres.all()]
+
 
     def get_like_user(self, obj):
         return [{'username': user.username, 'id': user.id} for user in obj.like_user.all()]
