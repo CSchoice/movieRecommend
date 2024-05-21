@@ -10,6 +10,14 @@ class Actor(models.Model):
     db_actor_id = models.IntegerField(unique=True)
     profile_path = models.CharField(max_length=200, blank=True, null=True)
     character = models.CharField(max_length=40, blank=True, null=True)
+    popularity = models.FloatField(blank=True, null=True)
+
+class Director(models.Model):
+    name = models.CharField(max_length=20)
+    db_director_id = models.IntegerField(unique=True)
+    profile_path = models.CharField(max_length=200, blank=True, null=True)
+    job = models.CharField(max_length=40, blank=True, null=True)
+    popularity = models.FloatField(blank=True, null=True)
      
 class Movie(models.Model):
     db_movie_id = models.IntegerField(unique=True)
@@ -21,6 +29,7 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=200)
     like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_movies')
     actors = models.ManyToManyField(Actor, blank=True)
+    directors = models.ManyToManyField(Director, blank=True)
     genres = models.ManyToManyField(Genre)
 
 # class likedMovie(models.Model):

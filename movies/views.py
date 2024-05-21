@@ -5,10 +5,9 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 from datetime import datetime
-from .models import Movie, Genre
 from .serializers import MovieSerializer, MovieListSerializer
 import random
-from .models import Movie, Actor, Genre
+from .models import Movie, Actor, Genre, Director
 import requests
 from decouple import config
 
@@ -184,7 +183,7 @@ def save_new_movie_data(request, db_movie_id):
                 genre, _ = Genre.objects.get_or_create(db_genre_id=genre_id)  # 이 부분을 수정합니다.
                 movie.genres.add(genre)
         
-        # 배우 정보 저장
+    # 배우 정보 저장
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language=ko-KR"
 
     headers = {
@@ -196,7 +195,6 @@ def save_new_movie_data(request, db_movie_id):
     from pprint import pprint
     if response.status_code == 200:
         item = response.json()
-        pprint(item)
         # movie_id = item["id"]
         cast_list = item["cast"]
 
@@ -207,7 +205,7 @@ def save_new_movie_data(request, db_movie_id):
         )
         pprint(cast_list)
         # 배우 정보 생성 및 연결
-        for cast_data in cast_list:
+        for cast_data in cast_list[0:5]:
             actor_id = cast_data["id"]
             actor, _ = Actor.objects.get_or_create(
                 db_actor_id=actor_id,
@@ -215,59 +213,40 @@ def save_new_movie_data(request, db_movie_id):
                 "name": cast_data["name"],
                 "profile_path": cast_data["profile_path"],
                 "character": cast_data["character"],
+                "popularity": cast_data["popularity"],
                 }
             )
 
             movie.actors.add(actor)
-        
-        return Response({'message': 'Movie data saved successfully.'}, status=200)
-    else:
-        return Response({'message': 'Failed to fetch movie data from API.'}, status=500)
-
-
-@api_view(['GET'])
-def save_new_actor_data(request):
-    url = "https://api.themoviedb.org/3/movie/movie_id/credits?language=en-US"
-
-    headers = {
-        "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBmZjQxMDZkN2M3NWQ4YThiMDYwNzhlMzUxMjgwZiIsInN1YiI6IjY2Mjc0MzliYWY5NTkwMDE2NDY5MzQ5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JAyRCq0NoCjWHtBG6mp5xtIMvf5gpqgJTg_7S-SGTa0"
-    }
-
-    for item in data:
-        movie_id = item["id"]
-        cast_list = item["cast"]
+            
+        #감독 데이터 추가
+        # movie_id = item["id"]
+        cast_list = item["crew"]
+        filtered_crew = [member for member in cast_list if member['job'] == 'Director'][0]
 
         # 영화 정보 생성
         movie = Movie.objects.get(
             db_movie_id=movie_id,
             # 다른 필드들을 설정하십시오.
         )
-
         # 배우 정보 생성 및 연결
-        for cast_data in cast_list:
-            actor_id = cast_data["id"]
-            actor, _ = Actor.objects.get_or_create(
-                db_actor_id=actor_id,
-                defaults={
-                "name": cast_data["name"],
-                "profile_path": cast_data["profile_path"],
-                "character": cast_data["character"],
-                }
-            )
-            movie.actors.add(actor)
+        director_id = filtered_crew["id"]
+        director, _ = Director.objects.get_or_create(
+            db_director_id=director_id,
+            defaults={
+            "name": filtered_crew["name"],
+            "profile_path": filtered_crew["profile_path"],
+            "job": filtered_crew["job"],
+            "popularity": filtered_crew["popularity"],
+            }
+        )
 
-        # 장르 정보 생성 및 연결
-        # 필요하다면 비슷한 방식으로 장르 정보를 처리할 수 있습니다.
+        movie.directors.add(director)
+        
+        return Response({'message': 'Movie data saved successfully.'}, status=200)
+    else:
+        return Response({'message': 'Failed to fetch movie data from API.'}, status=500)
 
-        # 영화 정보 저장
-        movie.save()
-
-        # 각 장르에 대해 Genre 모델에 레코드 생성 및 연결
-        for genre_id in genres:
-            genre, created = Genre.objects.get_or_create(db_genre_id=genre_id)
-            movie.genres.add(genre)
-    return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
 
 
 
