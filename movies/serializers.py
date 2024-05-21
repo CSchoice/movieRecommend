@@ -32,6 +32,3 @@ class MovieListSerializer(serializers.ModelSerializer):
     
     def get_like_user(self, obj):
         return [{'username': user.username, 'id': user.id} for user in obj.like_user.all()]
-
-
-    
