@@ -21,6 +21,9 @@ django-allauth==0.59.0
 django-cors-headers==4.3.1
 django-rest-authtoken==2.1.4
 djangorestframework==3.14.0
+Flask==3.0.3
+Flask-BasicAuth==0.2.0
+Flask-Cors==4.0.1
 frozenlist==1.4.1
 gevent==23.9.1
 geventhttpclient==2.0.11
@@ -43,6 +46,7 @@ psutil==5.9.6
 pycparser==2.21
 pydantic==2.7.1
 pydantic_core==2.18.2
+PyJWT==2.8.0
 python-dateutil==2.8.2
 python-decouple==3.8
 python3-openid==3.2.0

@@ -14,14 +14,15 @@ def recommend_highly_rated_similar_movies(emotion, movie_title):
         f"Recommend movies that are similar to this and have a rating of 9 out of 10 or higher."
         f"Include detailed descriptions for each movie."
         f"Recommend movies from the 2010s or later."
-        f"answer Korean response"
+        # f"answer Korean response"
         f"based on emotion 70%, movie_title 30%"
     )
     response = openai.ChatCompletion.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are a movie critic and helpful assistant ."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": "You are a movie critic and helpful assistant and you are ."},
+            {"role": "user", "content": prompt},
+            {"role": "user", "content": 'answer Korean response'}
         ],
         max_tokens=700
     )
