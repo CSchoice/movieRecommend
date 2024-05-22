@@ -302,7 +302,7 @@ def save_actor_data(request):
             movie.genres.add(genre)
     return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def search_poster(request):
     movie_list = request.POST['movies']
     new_movie_list = []
