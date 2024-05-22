@@ -324,5 +324,5 @@ def search_poster(request):
             
             result = {db_movie_id:db_movie_id, poster_path:f'https://image.tmdb.org/t/p/original/{poster_path}', title:title}
             new_movie_list.append(result)
-        
+    result = {'movies' : new_movie_list}
     return Response(result)
