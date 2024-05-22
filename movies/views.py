@@ -301,3 +301,24 @@ def save_actor_data(request):
             genre, created = Genre.objects.get_or_create(db_genre_id=genre_id)
             movie.genres.add(genre)
     return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def search_poster(request, movie_name):
+    url = f"https://api.themoviedb.org/3/search/movie?query={movie_name}&include_adult=false&language=ko-KR&page=1"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBmZjQxMDZkN2M3NWQ4YThiMDYwNzhlMzUxMjgwZiIsInN1YiI6IjY2Mjc0MzliYWY5NTkwMDE2NDY5MzQ5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JAyRCq0NoCjWHtBG6mp5xtIMvf5gpqgJTg_7S-SGTa0"
+    }
+
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        item = response.json()
+        movie = item['results'][0]
+        db_movie_id = movie['id']
+        poster_path = movie['poster_path']
+        title = movie['title']
+        
+        result = {db_movie_id:db_movie_id, poster_path:f'https://image.tmdb.org/t/p/original/{poster_path}', title:title}
+    
+    return Response(result)
