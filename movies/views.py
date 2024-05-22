@@ -429,14 +429,17 @@ def search_poster(request):
         }
 
         response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            item = response.json()
-            movie = item['results'][0]
-            db_movie_id = movie['id']
-            poster_path = movie['poster_path']
-            title = movie['title']
-            
-            result = {'db_movie_id':db_movie_id, 'poster_path':f'https://image.tmdb.org/t/p/original/{poster_path}', 'title':title}
-            new_movie_list.append(result)
-    # result = {'movies' : new_movie_list}
+        try: 
+            if response.status_code == 200:
+                item = response.json()
+                movie = item['results'][0]
+                db_movie_id = movie['id']
+                poster_path = movie['poster_path']
+                title = movie['title']
+                
+                result = {'db_movie_id':db_movie_id, 'poster_path':f'https://image.tmdb.org/t/p/original/{poster_path}', 'title':title}
+                new_movie_list.append(result)
+        except: continue
+
     return Response(new_movie_list)
+    
