@@ -305,7 +305,7 @@ def movie_exist(request, db_movie_id):
                 serializer = MovieListSerializer(movie)
                 return Response({'message': 'Movie data saved successfully.', "movie": serializer.data}, status=200)
             else:
-                return Response({'message': 'Failed to fetch movie data from API.', "movie": serializer.data}, status=500)
+                return Response({'message': 'Failed to fetch movie data from API.', "movie": serializer.errors}, status=500)
 
 @api_view(['POST'])
 def save_genre_data(request):
