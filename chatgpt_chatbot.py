@@ -1,3 +1,4 @@
+import json
 import openai
 from decouple import config
 
@@ -19,8 +20,11 @@ def chatbot():
     
     messages = [
         {"role": "system", "content": "You are an expert in recommending movies and Korean."},
-        {"role": "user", "content": '사용자가 입력한 감정을 해소할 수 있는 장르를 3개 추천해주고, 그 장르를 바탕으로 영화를 10개 추천해줘, 그리고 영화 포스터 이미지를 구글에서 찾아서 보여줘'},
-        {"role": "user", "content": '그 영화들의 포스터 이미지를 같이 보내줘'},
+        {"role": "user", "content": "앞으로 답변은 한국어로 해줘"},
+        {"role": "user", "content": "사용자가 입력한 감정을 해소할 수 있는 장르를 3개 추천해줘. (추천 장르는 보여주지 않아도 괜찮아)"},
+        {"role": "user", "content": "앞에서 추천해준 장르별로 영화를 3개씩 추천해주고, 중복되지 않는 추가 추천 영화도 3개 추천해줘."},
+        {"role": "user", "content": "12개의 영화를 |로 구분해서 []안에 담아줘."},
+        {"role": "user", "content": "[]에 담긴 영화를 하나의 json 형식 만들어줘."}
     ]
     
     while True:
@@ -39,7 +43,14 @@ def chatbot():
         messages.append({"role": "assistant", "content": recommendation})
         
         # 추천 영화 출력
-        print(f"추천 영화: {recommendation}")
+        print(recommendation)
+        recommendation = json.dumps(recommendation)
+        # JSON 형식으로 변환하여 영화 제목 출력
+        parsed_data = json.loads(recommendation)
+        print(parsed_data)
+        # movie_titles = parsed_data['movies']
+        # for title in movie_titles:
+        #     print(title)
 
 # 챗봇 실행
 chatbot()

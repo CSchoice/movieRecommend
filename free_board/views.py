@@ -61,6 +61,7 @@ def edit_free_board_article(request, article_pk):
 def create_free_board_comment(request, article_pk):
     article = get_object_or_404(FreeBoardArticle, pk=article_pk)
     serializer = FreeBoardCommentSerializer(data=request.data)
+
     if serializer.is_valid():
         serializer.save(article=article, user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -94,4 +95,3 @@ def like_free_board_article(request, article_pk):
         # 좋아요 추가
         article.like_user.add(request.user)
         return Response({"message": "게시글 좋아요 성공"}, status=status.HTTP_200_OK)
-    
