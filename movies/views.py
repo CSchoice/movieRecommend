@@ -190,7 +190,121 @@ def movie_exist(request, db_movie_id):
         serializer = MovieListSerializer(movie)
         return Response({"message": "영화가 db에 있습니다", "movie": serializer.data}, status=status.HTTP_200_OK)
     except:
-        return Response({"message": "영화가 db에 없습니다"}, status=status.HTTP_200_OK)
+            url = f"https://api.themoviedb.org/3/movie/{db_movie_id}?language=ko-KR"
+
+            headers = {
+                "accept": "application/json",
+                "Authorization": f"Bearer {config('TMDB_KEY')}"
+            }
+
+            response = requests.get(url, headers=headers)
+            
+            if response.status_code == 200:
+                item = response.json()
+                
+                # 각 영화에 대한 데이터 추출
+                title = item.get('title')
+                overview = item.get('overview')
+                release_date_str = item.get('release_date')
+                if release_date_str:  # release_date가 비어 있지 않은 경우
+                    try:
+                        release_date = datetime.strptime(release_date_str, '%Y-%m-%d').date()
+                    except ValueError:
+                        print(f"Invalid date format for movie: {title}. Skipping...")
+                        return Response({'message': f"Invalid date format for movie: {title}. Skipping..."}, status=400)
+                else:
+                    release_date = None
+                popularity = item.get('popularity')
+                vote_average = item.get('vote_average')
+                poster_path = item.get('poster_path')
+                movie_id = item.get('id')
+                genres = item.get('genres')
+                
+                # 장르 데이터 추출
+                genre_ids = [genre['id'] for genre in genres] if genres else []
+                
+                # 영화 데이터 저장
+                movie, created = Movie.objects.get_or_create(
+                    db_movie_id=movie_id,
+                    defaults={
+                        'title': title,
+                        'overview': overview,
+                        'release_date': release_date,
+                        'popularity': popularity,
+                        'vote_average': vote_average,
+                        'poster_path': poster_path,
+                    }
+                )
+                
+                # 장르 데이터 저장
+                if created:  # 새로운 영화인 경우에만
+                    for genre_id in genre_ids:
+                        genre, _ = Genre.objects.get_or_create(db_genre_id=genre_id)  # 이 부분을 수정합니다.
+                        movie.genres.add(genre)
+                
+            # 배우 정보 저장
+            url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits?language=ko-KR"
+
+            headers = {
+                "accept": "application/json",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NzBmZjQxMDZkN2M3NWQ4YThiMDYwNzhlMzUxMjgwZiIsInN1YiI6IjY2Mjc0MzliYWY5NTkwMDE2NDY5MzQ5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JAyRCq0NoCjWHtBG6mp5xtIMvf5gpqgJTg_7S-SGTa0"
+            }
+
+            response = requests.get(url, headers=headers)
+            from pprint import pprint
+            if response.status_code == 200:
+                item = response.json()
+                # movie_id = item["id"]
+                cast_list = item["cast"]
+
+                # 영화 정보 생성
+                movie = Movie.objects.get(
+                    db_movie_id=movie_id,
+                    # 다른 필드들을 설정하십시오.
+                )
+                pprint(cast_list)
+                # 배우 정보 생성 및 연결
+                for cast_data in cast_list[0:5]:
+                    actor_id = cast_data["id"]
+                    actor, _ = Actor.objects.get_or_create(
+                        db_actor_id=actor_id,
+                        defaults={
+                        "name": cast_data["name"],
+                        "profile_path": cast_data["profile_path"],
+                        "character": cast_data["character"],
+                        "popularity": cast_data["popularity"],
+                        }
+                    )
+
+                    movie.actors.add(actor)
+                    
+                #감독 데이터 추가
+                # movie_id = item["id"]
+                cast_list = item["crew"]
+                filtered_crew = [member for member in cast_list if member['job'] == 'Director'][0]
+
+                # 영화 정보 생성
+                movie = Movie.objects.get(
+                    db_movie_id=movie_id,
+                    # 다른 필드들을 설정하십시오.
+                )
+                # 배우 정보 생성 및 연결
+                director_id = filtered_crew["id"]
+                director, _ = Director.objects.get_or_create(
+                    db_director_id=director_id,
+                    defaults={
+                    "name": filtered_crew["name"],
+                    "profile_path": filtered_crew["profile_path"],
+                    "job": filtered_crew["job"],
+                    "popularity": filtered_crew["popularity"],
+                    }
+                )
+
+                movie.directors.add(director)
+                
+                return Response({'message': 'Movie data saved successfully.', "movie": serializer.data}, status=200)
+            else:
+                return Response({'message': 'Failed to fetch movie data from API.', "movie": serializer.data}, status=500)
 
 @api_view(['POST'])
 def save_genre_data(request):
