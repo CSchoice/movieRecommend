@@ -16,11 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.url')),
-    path('free_board/', include('free_board.url')),
-    path('movie_board/', include('movie_board.url')),
-    path('movies/', include('movies.url')),
+    path('accounts/', include('accounts.urls')),
+    path('free_board/', include('free_board.urls')),
+    path('movie_board/', include('movie_board.urls')),
+    path('movies/', include('movies.urls')),
+
+    # 소셜로그인 관련 url
+    # path('accounts/', include('accounts.urls')),
+    # path('accounts/', include('allauth.urls')),
 ]

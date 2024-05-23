@@ -1,32 +1,43 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework import status
+from .models import MovieBoardComment
+from .serializers import (
+    MovieBoardCommentListSerializer,
+    MovieBoardCommentSerializer)
+from movies.models import Movie
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes
 
-# Create your views here.
-from django.shortcuts import render
-from django.http import JsonResponse
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+def movie_board_comment_list(request, movie_pk):
+    movie = Movie.objects.get(db_movie_id=movie_pk)
+    comments = MovieBoardComment.objects.filter(movie=movie).order_by('-created_at')
+    serializer = MovieBoardCommentListSerializer(comments, many=True)
+    return Response(serializer.data)
 
-def movie_board_list(request):
-    pass
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+def create_movie_board_comment(request, movie_id):
+    movie = get_object_or_404(Movie, db_movie_id=movie_id)
+    serializer = MovieBoardCommentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(movie=movie, user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def create_movie_board_article(request):
-    pass
-
-def movie_board_article_detail(request, article_pk):
-    pass
-
-def edit_movie_board_article(request, article_pk):
-    pass
-
-def delete_movie_board_article(request, article_pk):
-    pass
-
-def create_comment(request, article_pk):
-    pass
-
-def edit_comment(request, article_pk, comment_pk):
-    pass
-
-def delete_comment(request, article_pk, comment_pk):
-    pass
-
-def like_movie_board_article(request, article_pk):
-    pass
+@api_view(['PUT', 'DELETE'])
+@authentication_classes([TokenAuthentication])
+def edit_movie_board_comment(request, movie_id, comment_pk):
+    comment = get_object_or_404(MovieBoardComment, pk=comment_pk)
+    if request.method == 'PUT':
+        serializer = MovieBoardCommentSerializer(comment, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        comment.delete()
+        return Response({"message": "댓글 삭제 성공"}, status=status.HTTP_200_OK)
+    

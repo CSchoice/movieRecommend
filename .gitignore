@@ -476,4 +476,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#환경변수
+.env
+
+git config --global core.autocrlf true
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,visualstudiocode,pycharm,python,django,venv,database
