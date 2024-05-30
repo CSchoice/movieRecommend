@@ -443,4 +443,78 @@ def search_poster(request):
         except: continue
 
     return Response(new_movie_list)
-    
+
+@api_view(['POST'])
+def get_movie_id(request):
+    movies = Movie.objects.all()
+    movie_id_lst = [movie.db_movie_id for movie in movies]
+    return Response({'movies': movie_id_lst})
+
+# @api_view(['GET'])
+# def save_director_data(request):
+#     with open('movies/data/directors.json', 'r', encoding='utf-8') as f:
+#         data = json.load(f)
+
+#     for item in data:
+#         movie_id = item["id"]
+#         cast_list = item["cast"]
+
+#         # 영화 정보 생성
+#         movie = Movie.objects.get(
+#             db_movie_id=movie_id,
+#             # 다른 필드들을 설정하십시오.
+#         )
+
+#         # 배우 정보 생성 및 연결
+#         for cast_data in cast_list:
+#             actor_id = cast_data["id"]
+#             actor, _ = Actor.objects.get_or_create(
+#                 db_actor_id=actor_id,
+#                 defaults={
+#                 "name": cast_data["name"],
+#                 "profile_path": cast_data["profile_path"],
+#                 "character": cast_data["character"],
+#                 }
+#             )
+#             movie.actors.add(actor)
+
+#         # 장르 정보 생성 및 연결
+#         # 필요하다면 비슷한 방식으로 장르 정보를 처리할 수 있습니다.
+
+#         # 영화 정보 저장
+#         movie.save()
+#     return Response({'message': 'Movie data saved successfully'}, status=status.HTTP_201_CREATED)
+
+def save_director_data(request):
+    # directors.json 파일 읽기
+    with open('movies/data/directors.json', 'r', encoding='utf-8') as f:
+        directors_data = json.load(f)
+
+    # 데이터베이스에 저장
+    for movie_id, directors_list in directors_data.items():
+        try:
+            # 영화 정보 가져오기
+            movie = Movie.objects.get(db_movie_id=movie_id)
+        except Movie.DoesNotExist:
+            # 해당하는 영화 정보가 없으면 건너뛰기
+            continue
+
+        # 감독 정보를 영화에 저장
+        for director_info in directors_list:
+            # 감독 정보 추출
+            director_id = director_info['id']
+            name = director_info['name']
+            profile_path = director_info['profile_path']
+            job = director_info.get('job', None)  # 'job' 키가 없을 경우 None으로 설정
+            popularity = director_info.get('popularity', None)  # 'popularity' 키가 없을 경우 None으로 설정
+
+            # Director 모델에 저장
+            director, created = Director.objects.get_or_create(
+                db_director_id=director_id,
+                defaults={'name': name, 'profile_path': profile_path, 'job': job, 'popularity': popularity}
+            )
+
+            # 영화에 감독 정보 추가
+            movie.directors.add(director)
+
+    return Response({'message': 'Director data saved successfully'})
